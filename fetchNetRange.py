@@ -1,3 +1,4 @@
+# automain.py
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from bs4 import BeautifulSoup
@@ -8,10 +9,6 @@ from datetime import datetime, timedelta
 # 忽略不安全的請求警告
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-# 起始日期和結束日期
-start_date = datetime.strptime('2024-1-1', '%Y-%m-%d')
-end_date = datetime.strptime('2024-1-3', '%Y-%m-%d')
-
 # 定義需要提取的表格ID列表
 table_ids = [
     'account_list_1', 'account_list_101', 'account_list_201',
@@ -20,11 +17,7 @@ table_ids = [
     'account_list_901'
 ]
 
-folder_path = 'nchu_top1000_data'
-os.makedirs(folder_path, exist_ok=True)
-
-
-def fetch_data_for_date(date):
+def fetch_data_for_date(date, folder_path):
     url = f'https://top100.nchu.edu.tw/nchubody2.php?date={date}'
     try:
         # 發送請求，忽略 SSL 憑證驗證
@@ -60,7 +53,6 @@ def fetch_data_for_date(date):
             # 定義CSV文件名
             csv_filename = os.path.join(folder_path, f"nchu_top1000_{timestamp}.csv")
             
-            
             # 將數據寫入CSV文件
             with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
                 csvwriter = csv.writer(csvfile)
@@ -72,8 +64,10 @@ def fetch_data_for_date(date):
     except requests.exceptions.RequestException as e:
         print(f"請求錯誤: {e} 日期: {date}")
 
-# 遍歷日期範圍
-current_date = start_date
-while current_date <= end_date:
-    fetch_data_for_date(current_date.strftime('%Y-%m-%d'))
-    current_date += timedelta(days=1)
+def fetch_data_in_range(start_date, end_date, folder_path):
+    os.makedirs(folder_path, exist_ok=True)
+    
+    current_date = start_date
+    while current_date <= end_date:
+        fetch_data_for_date(current_date.strftime('%Y-%m-%d'), folder_path)
+        current_date += timedelta(days=1)
