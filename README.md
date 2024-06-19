@@ -1,8 +1,13 @@
 # NCHU_Network-Traffic-Analysis
 
-用來進行中興大學的網路流量分析與IP對應分析，純粹為了好玩。  
-
----
+用來進行中興大學的網路流量分析與IP對應分析，純粹為了好玩。   
+---  
+使用方法:
+```
+python3 -m pip install -r requments.txt
+python3 .\main
+```
+---  
 ## 專案規劃
 
 1. **透過 top100.nchu.edu.tw 獲得流量**  
