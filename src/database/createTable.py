@@ -42,17 +42,17 @@ def create_tables():
 
             # 建立 IP_Unit
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS IP_Unit (
+                CREATE TABLE IF NOT EXISTS ip_unit (
                     ip VARCHAR(15) NOT NULL PRIMARY KEY,
                     unit_name VARCHAR(255) NOT NULL,
                     last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                 )
             """)
-            print("資料表 'IP_Unit' 已建立")
+            print("資料表 'ip_unit' 已建立")
 
-            # 建立 IP_History
+            # 建立 ip_history
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS IP_History (
+                CREATE TABLE IF NOT EXISTS ip_history (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     ip VARCHAR(15) NOT NULL,
                     unit_name VARCHAR(255) NOT NULL,
@@ -60,17 +60,17 @@ def create_tables():
                     end_time TIMESTAMP
                 )
             """)
-            print("資料表 'IP_History' 已建立")
+            print("資料表 'ip_history' 已建立")
 
-            # 建立 Files_Imported
+            # 建立 files_imported
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS Files_Imported (
+                CREATE TABLE IF NOT EXISTS files_imported (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     file_name VARCHAR(255) NOT NULL,
                     import_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                 )
             """)
-            print("資料表 'Files_Imported' 已建立")
+            print("資料表 'files_imported' 已建立")
 
         except db_connection.Error as e:
             print(f"[CreateTables]資料庫操作時發生錯誤: {e}")
