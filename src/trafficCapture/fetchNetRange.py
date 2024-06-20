@@ -17,28 +17,29 @@ table_ids = [
     'account_list_901'
 ]
 
+
 def fetch_data_for_date(date, folder_path):
+    # 預先確定CSV文件名
+    report_time_obj = datetime.strptime(date, '%Y-%m-%d')
+    timestamp = report_time_obj.strftime('%Y%m%d_000000')  # 預設時間
+    csv_filename = os.path.join(folder_path, f"nchu_top1000_{timestamp}.csv")
+
+    # 檢查文件是否已存在
+    if os.path.exists(csv_filename):
+        print(f"檔案 {csv_filename} 已存在，跳過下載。")
+        return  # 如果文件存在，直接返回不進行連線
+
     url = f'https://top100.nchu.edu.tw/nchubody2.php?date={date}'
     try:
         # 發送請求，忽略 SSL 憑證驗證
         response = requests.get(url, verify=False)
-        
+
         # 檢查回應狀態碼
         if response.status_code == 200:
             print(f"成功連線到網站: {date}")
-            
+
             # 解析HTML
             soup = BeautifulSoup(response.text, 'html.parser')
-            
-            # 提取報表產生時間
-            report_time_element = soup.find('td', text=lambda x: x and '報表產生時間' in x)
-            report_time_text = report_time_element.text.strip()
-            report_time = report_time_text.split('報表產生時間: ')[-1]
-            if '24:00' in report_time:
-                report_time = report_time.replace('24:00', '00:00')
-            report_time_obj = datetime.strptime(report_time, '%Y-%m-%d %H:%M')
-            timestamp = report_time_obj.strftime('%Y%m%d_%H%M%S')
-            
             all_data = []
 
             for table_id in table_ids:
@@ -49,10 +50,7 @@ def fetch_data_for_date(date, folder_path):
                         cols = row.find_all('td')
                         cols = [ele.text.strip() for ele in cols]
                         all_data.append(cols)
-            
-            # 定義CSV文件名
-            csv_filename = os.path.join(folder_path, f"nchu_top1000_{timestamp}.csv")
-            
+
             # 將數據寫入CSV文件
             with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
                 csvwriter = csv.writer(csvfile)
@@ -64,9 +62,10 @@ def fetch_data_for_date(date, folder_path):
     except requests.exceptions.RequestException as e:
         print(f"請求錯誤: {e} 日期: {date}")
 
+
 def fetch_data_in_range(start_date, end_date, folder_path):
     os.makedirs(folder_path, exist_ok=True)
-    
+
     current_date = start_date
     while current_date <= end_date:
         fetch_data_for_date(current_date.strftime('%Y-%m-%d'), folder_path)

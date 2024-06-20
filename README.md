@@ -4,7 +4,7 @@
 ---  
 使用方法:
 ```
-python3 -m pip install -r requments.txt
+python3 -m pip install -r .\requirements.txt
 python3 .\main
 ```
 ---  
