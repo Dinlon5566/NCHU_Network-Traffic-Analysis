@@ -21,12 +21,12 @@ python3 .\main
 ```
 SELECT DISTINCT `unit_name` FROM `ip_unit`;
 ```
-![img1](.\data\doc\img1.png)
+![img1](./data/doc/img1.png)
 
 ```
 SELECT * FROM `ip_unit` ORDER BY `last_updated` ASC;
 ```
-![img2](.\data\doc\img2.png)
+![img2](./data/doc/img2.png)
 
 ---  
 ## 專案規劃
